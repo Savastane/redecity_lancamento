@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #00dc82;
+  --secondary: #003543;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  background-color: var(--secondary);
+}
+
+.snap-y {
+  scroll-snap-type: y mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+@layer base {
+  body {
+    @apply bg-[#003543] text-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply rounded-lg bg-[#00dc82] px-4 py-2 font-medium text-[#003543] transition-all hover:bg-[#00dc82]/90 active:scale-95;
+  }
+  
+  .btn-secondary {
+    @apply rounded-lg bg-white/10 px-4 py-2 font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-95;
+  }
+}

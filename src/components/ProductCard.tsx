@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
 import type { Product } from '../types';
+import { submitLead } from '../api/leadsApi';
+import { userIP } from '../App';
 
 interface ProductCardProps {
   product: Product;
@@ -60,13 +62,22 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     const lead = {
-      ...leadForm,
-      product: product.name,
-      category: product.category,
-      timestamp: new Date().toISOString(),
+      idproduto: product.id,
+      nome: leadForm.name,
+      email: leadForm.email,
+      whatsapp: leadForm.whatsapp,
+      cep: leadForm.cep,
+      comentario: leadForm.comment,
+      ip_address: userIP,
     };
-    console.log('Lead captured:', lead);
+    try {
+      await submitLead(lead);
+      console.log('Lead submitted successfully');
+    } catch (error) {
+      console.error('Failed to submit lead', error);
+    }
     setShowLeadForm(false);
     setShowPopup(true);
     setTimeout(() => {

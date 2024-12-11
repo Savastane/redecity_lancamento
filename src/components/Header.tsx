@@ -85,10 +85,9 @@ export default function Header({ onOpenCart, cartItemsCount }: HeaderProps) {
               <select
                 value={location.state}
                 onChange={(e) => setLocation(prev => ({ ...prev, state: e.target.value }))}
-                style={{ backgroundColor: '#1a2028' }}
-                className="w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-[#00ff9d] text-white appearance-none cursor-pointer hover:bg-[#2a3038]"
+                className="w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-[#00ff9d] text-white bg-[#2a3038] appearance-none cursor-pointer hover:bg-[#3a4048]"
               >
-                <option className="bg-[#1a2028] text-white hover:bg-[#2a3038]" value="Bahia">Bahia</option>
+                <option className="bg-[#2a3038] text-white hover:bg-[#3a4048]" value="Bahia">Bahia</option>
                 {/* Add more states as needed */}
               </select>
             </div>
@@ -98,12 +97,11 @@ export default function Header({ onOpenCart, cartItemsCount }: HeaderProps) {
               <select
                 value={location.city}
                 onChange={(e) => setLocation(prev => ({ ...prev, city: e.target.value }))}
-                style={{ backgroundColor: '#1a2028' }}
-                className="w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-[#00ff9d] text-white appearance-none cursor-pointer hover:bg-[#2a3038]"
+                className="w-full rounded-lg p-3 outline-none focus:ring-2 focus:ring-[#00ff9d] text-white bg-[#2a3038] appearance-none cursor-pointer hover:bg-[#3a4048]"
               >
-                <option className="bg-[#1a2028] text-white hover:bg-[#2a3038]" value="Salvador">Salvador</option>
-                <option className="bg-[#1a2028] text-white hover:bg-[#2a3038]" value="Itapicuru">Itapicuru</option>
-                <option className="bg-[#1a2028] text-white hover:bg-[#2a3038]" value="Dias Dávila">Dias Dávila</option>
+                <option className="bg-[#2a3038] text-white hover:bg-[#3a4048]" value="Salvador">Salvador</option>
+                <option className="bg-[#2a3038] text-white hover:bg-[#3a4048]" value="Itapicuru">Itapicuru</option>
+                <option className="bg-[#2a3038] text-white hover:bg-[#3a4048]" value="Dias Dávila">Dias Dávila</option>
               </select>
             </div>
           </div>

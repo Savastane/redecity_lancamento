@@ -53,7 +53,7 @@ html {
   }
 
   .cadastrar-button {
-    @apply bg-[#ffd700] text-black;
+    @apply bg-[#00dc82] text-[#003543];
   }
 }
 

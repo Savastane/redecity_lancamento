@@ -40,3 +40,14 @@ html {
     @apply rounded-lg bg-white/10 px-4 py-2 font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-95;
   }
 }
+
+/* Animação para piscar */
+.animate-blink {
+  animation: blink-animation 1s steps(5, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
 import type { Product } from '../types';
 
@@ -12,6 +12,7 @@ interface LeadForm {
   email: string;
   whatsapp: string;
   cep?: string;
+  comment?: string;
 }
 
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
@@ -25,6 +26,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     email: '',
     whatsapp: '',
     cep: '',
+    comment: '',
   });
 
   // Função para formatar o número de WhatsApp
@@ -44,6 +46,16 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       .replace(/(\d{5})(\d)/, '$1-$2')
       .slice(0, 9);
   };
+
+  useEffect(() => {
+    const element = document.querySelector('.launch-date');
+    if (element) {
+      element.classList.add('animate-blink');
+      setTimeout(() => {
+        element.classList.remove('animate-blink');
+      }, 5000);
+    }
+  }, []);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,9 +90,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
             <div className="text-white max-w-[75%]">
               <h2 className="text-2xl font-bold leading-tight">{product.name}</h2>
               <div className="mt-2">
-                <div className="flex items-center gap-2 text-primary mb-2">
+                <div className="flex items-center gap-2 text-yellow-500 mb-2 launch-date">
                   <Calendar className="h-5 w-5" />
-                  <span className="font-medium">Lançamento: 1 de Fevereiro de 2025</span>
+                  <span className="font-medium text-shadow" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Lançamento: 1 de Fevereiro de 2025</span>
                 </div>
                 <button 
                   onClick={() => setShowLeadForm(true)}
@@ -162,6 +174,16 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
                   className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="CEP"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">Comentário</label>
+                <textarea
+                  value={leadForm.comment}
+                  onChange={(e) => setLeadForm({ ...leadForm, comment: e.target.value })}
+                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Deixe seu comentário aqui"
+                  rows={2}
                 />
               </div>
               <div className="flex gap-3 mt-6">

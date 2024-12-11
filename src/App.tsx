@@ -76,7 +76,7 @@ function HomePage() {
       <Header
         onOpenCart={cart.toggleCart}
         cartItemsCount={cart.totalItems}
-        onSearch={setSearchQuery}
+        // onSearch={setSearchQuery}
       />
       
       <div className="mx-auto h-screen w-full max-w-[430px] bg-[#1a2028] pt-16">

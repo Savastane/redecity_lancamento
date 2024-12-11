@@ -39,6 +39,22 @@ html {
   .btn-secondary {
     @apply rounded-lg bg-white/10 px-4 py-2 font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 active:scale-95;
   }
+
+  .modal-background {
+    @apply bg-[#1a1a1a] text-white;
+  }
+
+  .input-field {
+    @apply bg-[#333333] text-white border-none;
+  }
+
+  .cancel-button {
+    @apply bg-[#1a1a1a] text-white;
+  }
+
+  .cadastrar-button {
+    @apply bg-[#ffd700] text-black;
+  }
 }
 
 /* Animação para piscar */

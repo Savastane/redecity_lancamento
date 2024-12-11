@@ -145,7 +145,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       {/* Lead Capture Form Modal */}
       {showLeadForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-secondary p-6 rounded-xl max-w-md w-full mx-4">
+          <div className="modal-background p-6 rounded-xl max-w-md w-full mx-4">
             <h3 className="text-xl font-bold text-white mb-4">Cadastre seu interesse</h3>
             <form onSubmit={handleLeadSubmit} className="space-y-4">
               <div>
@@ -155,7 +155,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   required
                   value={leadForm.name}
                   onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Seu nome completo"
                 />
               </div>
@@ -166,7 +166,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   required
                   value={leadForm.email}
                   onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="seu@email.com"
                 />
               </div>
@@ -177,7 +177,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   required
                   value={leadForm.whatsapp}
                   onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="(00) 00000-0000"
                 />
               </div>
@@ -187,7 +187,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   type="text"
                   value={leadForm.cep}
                   onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="CEP"
                 />
               </div>
@@ -196,7 +196,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 <textarea
                   value={leadForm.comment}
                   onChange={(e) => setLeadForm({ ...leadForm, comment: e.target.value })}
-                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="Deixe seu comentário aqui"
                   rows={2}
                 />
@@ -205,13 +205,13 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 <button
                   type="button"
                   onClick={() => setShowLeadForm(false)}
-                  className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                  className="cancel-button flex-1 hover:bg-white/20 px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                  className="cadastrar-button flex-1 hover:bg-yellow-500 px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
                   Cadastrar
                 </button>

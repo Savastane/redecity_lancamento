@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback } from 'react';
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProductCard from './components/ProductCard';
 import Cart from './components/Cart';
@@ -13,6 +13,8 @@ import FavoritesPage from './pages/FavoritesPage';
 import TokensPage from './pages/TokensPage';
 import NavigationArrows from './components/NavigationArrows';
 import FAQPage from './pages/FAQPage';
+
+let userIP = '';
 
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -116,6 +118,16 @@ function HomePage() {
 }
 
 function App() {
+  useEffect(() => {
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(data => {
+        userIP = data.ip;
+       // console.log('IP Address:', userIP);
+      })
+      .catch(error => console.error('Error fetching IP:', error));
+  }, []);
+
   return (
     <BrowserRouter>
       <AuthProvider>
@@ -133,4 +145,5 @@ function App() {
   );
 }
 
+export { userIP };
 export default App;

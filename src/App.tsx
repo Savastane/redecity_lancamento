@@ -123,7 +123,7 @@ function App() {
       .then(response => response.json())
       .then(data => {
         userIP = data.ip;
-       // console.log('IP Address:', userIP);
+        console.log('IP Address:', userIP);
       })
       .catch(error => console.error('Error fetching IP:', error));
   }, []);

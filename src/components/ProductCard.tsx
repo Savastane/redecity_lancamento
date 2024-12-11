@@ -28,6 +28,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     cep: '',
     comment: '',
   });
+  const [showPopup, setShowPopup] = useState(false);
 
   // Função para formatar o número de WhatsApp
   const formatWhatsApp = (value: string) => {
@@ -59,7 +60,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement lead submission to your backend
     const lead = {
       ...leadForm,
       product: product.name,
@@ -68,12 +68,27 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
     console.log('Lead captured:', lead);
     setShowLeadForm(false);
-    // Show success message
-    alert('Obrigado pelo interesse! Entraremos em contato próximo ao lançamento.');
+    setShowPopup(true);
   };
 
   return (
     <div className="absolute inset-0 h-full w-full">
+      {showPopup && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 px-4">
+          <div className="bg-white text-black text-center py-8 px-16 rounded-xl shadow-2xl relative max-w-md mx-auto">
+            <button onClick={() => setShowPopup(false)} className="absolute top-2 right-2 text-gray-500 hover:text-black">&times;</button>
+            <div className="flex justify-center mb-4">
+              <div className="bg-green-500 rounded-full p-4">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+            </div>
+            <h2 className="font-bold text-xl">Sucesso</h2>
+            <p className="mt-2">Obrigado pelo interesse! Entraremos em contato em breve.</p>
+          </div>
+        </div>
+      )}
       <video
         src={product.videoUrl}
         className="absolute inset-0 h-full w-full object-cover"

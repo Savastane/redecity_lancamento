@@ -12,6 +12,7 @@ import ProfilePage from './pages/ProfilePage';
 import FavoritesPage from './pages/FavoritesPage';
 import TokensPage from './pages/TokensPage';
 import NavigationArrows from './components/NavigationArrows';
+import FAQPage from './pages/FAQPage';
 
 function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -124,6 +125,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/tokens" element={<TokensPage />} />
+          <Route path="/faq" element={<FAQPage />} />
         </Routes>
         <MenuStart />
       </AuthProvider>

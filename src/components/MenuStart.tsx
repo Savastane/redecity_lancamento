@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, PackageSearch, User, ChevronRight, X } from 'lucide-react';
+import { Home, PackageSearch, HelpCircle, ChevronRight, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Login from './Login';
 import UserAvatar from './UserAvatar';
@@ -44,10 +44,10 @@ export default function MenuStart() {
             <UserAvatar />
           ) : (
             <button 
-              onClick={() => setShowLogin(true)}
+              onClick={() => navigate('/faq')}
               className="bg-transparent hover:bg-white/10 rounded-full p-2 transition-all hover:scale-110"
             >
-              <User className="h-6 w-6 text-white" />
+              <HelpCircle className="h-6 w-6 text-white" />
             </button>
           )}
         </div>

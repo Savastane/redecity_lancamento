@@ -48,15 +48,15 @@ export default function Header({ onOpenCart, cartItemsCount }: HeaderProps) {
             </button>
 
             <button
-              onClick={onOpenCart}
+              //onClick={onOpenCart}
               className="relative rounded-full bg-[#00ff9d] p-3 text-[#1a2028] transition hover:bg-[#00ff9d]/90"
             >
-              <ShoppingBag className="h-6 w-6" />
+              {/* <ShoppingBag className="h-6 w-6" />
               {cartItemsCount > 0 && (
                 <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                   {cartItemsCount}
                 </span>
-              )}
+              )} */}
             </button>
           </div>
         </header>

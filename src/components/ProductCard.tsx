@@ -11,6 +11,7 @@ interface LeadForm {
   name: string;
   email: string;
   whatsapp: string;
+  cep?: string;
 }
 
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
@@ -23,7 +24,26 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     name: '',
     email: '',
     whatsapp: '',
+    cep: '',
   });
+
+  // Função para formatar o número de WhatsApp
+  const formatWhatsApp = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{2})(\d)/, '($1) $2')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .replace(/(\d{4})-(\d)(\d{4})/, '$1$2-$3')
+      .slice(0, 15);
+  };
+
+  // Função para formatar o CEP
+  const formatCEP = (value: string) => {
+    return value
+      .replace(/\D/g, '')
+      .replace(/(\d{5})(\d)/, '$1-$2')
+      .slice(0, 9);
+  };
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,8 +72,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         poster={product.thumbnailUrl}
       />
       
-      <div className="absolute inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent">
-        <div className="absolute bottom-10 left-0 right-0 p-6">
+      <div className="absolute  inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent">
+        <div className="absolute top-1/2 bottom-10 left-0 right-0 p-6">
           <div className="flex items-end justify-between">
             <div className="text-white max-w-[75%]">
               <h2 className="text-2xl font-bold leading-tight">{product.name}</h2>
@@ -64,7 +84,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 </div>
                 <button 
                   onClick={() => setShowLeadForm(true)}
-                  className="bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
                   Cadastrar Interesse
                 </button>
@@ -129,24 +149,34 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   type="tel"
                   required
                   value={leadForm.whatsapp}
-                  onChange={(e) => setLeadForm({ ...leadForm, whatsapp: e.target.value })}
+                  onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
                   className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
                   placeholder="(00) 00000-0000"
                 />
               </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-1">CEP</label>
+                <input
+                  type="text"
+                  value={leadForm.cep}
+                  onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
+                  className="w-full px-4 py-2 rounded-lg bg-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="CEP"
+                />
+              </div>
               <div className="flex gap-3 mt-6">
-                <button
-                  type="submit"
-                  className="flex-1 bg-primary hover:bg-primary/90 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
-                >
-                  Cadastrar
-                </button>
                 <button
                   type="button"
                   onClick={() => setShowLeadForm(false)}
                   className="flex-1 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
                   Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                >
+                  Cadastrar
                 </button>
               </div>
             </form>

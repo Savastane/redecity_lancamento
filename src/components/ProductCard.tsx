@@ -113,21 +113,24 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         poster={product.thumbnailUrl}
       />
       {/* absolute */}
-      <div className=" inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent">
-        <div className="absolute top-1/1  bottom-10 left-0 right-0 p-6">
+      <div className=" inset-0 bg-gradient-to-t from-secondary/95 via-secondary/50 to-transparent">
+        <div className="absolute top-1/2  bottom-10 left-0 right-0 p-6">
           <div className="flex items-end justify-between">
             <div className="text-white max-w-[75%]">
-              <h2 className="text-2xl font-bold leading-tight">{product.name}</h2>
+              <h2 className="text-2xl font-bold leading-tight text-shadow-md">{product.name}</h2>
               <div className="mt-2">
                 <div className="flex items-center gap-2 text-yellow-500 mb-2 launch-date">
                   <Calendar className="h-5 w-5" />
-                  <span className="font-medium text-shadow" style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Lançamento: 1 de Fevereiro de 2025</span>
+                  <span className="font-medium text-shadow-md" style={{ textShadow: '2px 2px 6px rgba(0, 0, 0, 0.7)' }}>Lançamento: 1 de Fevereiro de 2025</span>
+
                 </div>
+                
+
                 <button 
                   onClick={() => setShowLeadForm(true)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors duration-300 ease-in-out text-sm font-medium hover:shadow-lg hover:scale-105"
                 >
-                  Cadastrar Interesse
+                  Seja o primeiro a saber das novidades!
                 </button>
               </div>
             </div>

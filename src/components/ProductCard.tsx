@@ -128,7 +128,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
                 <button 
                   onClick={() => setShowLeadForm(true)}
-                  className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-colors duration-300 ease-in-out text-sm font-medium hover:shadow-lg hover:scale-105"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-transform duration-300 ease-in-out text-sm font-medium hover:shadow-lg hover:scale-105"
                 >
                   Seja o primeiro a saber das novidades!
                 </button>
@@ -163,77 +163,81 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       {showLeadForm && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="modal-background p-6 rounded-xl max-w-md w-full mx-4">
-            <h3 className="text-xl font-bold text-[#00dc82] mb-4">Cadastre seu interesse</h3>
-            <form onSubmit={handleLeadSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Nome</label>
-                <input
-                  type="text"
-                  required
-                  value={leadForm.name}
-                  onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
-                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Seu nome completo"
-                />
+            <h3 className="text-xl font-bold text-[#00dc82] mb-4">Participe do Lançamento!</h3>
+            <form onSubmit={handleLeadSubmit} className="space-y-4 flex flex-col justify-between h-full">
+              <div className="flex-1 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Nome *</label>
+                  <input
+                    type="text"
+                    required
+                    value={leadForm.name}
+                    onChange={(e) => setLeadForm({ ...leadForm, name: e.target.value })}
+                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Seu nome completo"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">E-mail *</label>
+                  <input
+                    type="email"
+                    required
+                    value={leadForm.email}
+                    onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
+                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="seu@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">WhatsApp *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={leadForm.whatsapp}
+                    onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
+                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="(DDD) Número de WhatsApp"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">CEP</label>
+                  <input
+                    type="text"
+                    value={leadForm.cep}
+                    onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
+                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="CEP"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Para oferecer informações específicas da sua região.</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Comentário</label>
+                  <textarea
+                    value={leadForm.comment}
+                    onChange={(e) => setLeadForm({ ...leadForm, comment: e.target.value })}
+                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                    placeholder="Como podemos ajudá-lo?"
+                    rows={2}
+                  />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">E-mail</label>
-                <input
-                  type="email"
-                  required
-                  value={leadForm.email}
-                  onChange={(e) => setLeadForm({ ...leadForm, email: e.target.value })}
-                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="seu@email.com"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">WhatsApp</label>
-                <input
-                  type="tel"
-                  required
-                  value={leadForm.whatsapp}
-                  onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
-                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="(00) 00000-0000"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">CEP</label>
-                <input
-                  type="text"
-                  value={leadForm.cep}
-                  onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
-                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="CEP"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-1">Comentário</label>
-                <textarea
-                  value={leadForm.comment}
-                  onChange={(e) => setLeadForm({ ...leadForm, comment: e.target.value })}
-                  className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Deixe seu comentário aqui"
-                  rows={2}
-                />
-              </div>
-              <div className="flex gap-3 mt-6">
-                <button
+              <div className="flex justify-between">
+                <button 
                   type="button"
+                  className="cancelar-button flex-none hover:bg-gray-700 px-4 py-3 rounded-lg transition-colors text-sm font-medium mr-2"
                   onClick={() => setShowLeadForm(false)}
-                  className="cancel-button flex-1 hover:bg-white/20 px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
                   Cancelar
                 </button>
-                <button
+                <button 
                   type="submit"
-                  className="cadastrar-button flex-1 hover:bg-yellow-500 px-6 py-3 rounded-lg transition-colors text-sm font-medium"
+                  className="cadastrar-button flex-grow hover:bg-yellow-500 px-6 py-3 rounded-lg transition-colors text-sm font-medium"
                 >
-                  Cadastrar
+                  Quero Participar
                 </button>
               </div>
             </form>
+            <p className="text-xs text-gray-500 mt-4">Garantimos que suas informações estão seguras conosco.</p>
           </div>
         </div>
       )}

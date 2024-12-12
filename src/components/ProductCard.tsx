@@ -112,9 +112,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         playsInline
         poster={product.thumbnailUrl}
       />
-      
-      <div className="absolute  inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent">
-        <div className="absolute top-1/2   bottom-10 left-0 right-0 p-6">
+      {/* absolute */}
+      <div className=" inset-0 bg-gradient-to-t from-secondary/90 via-secondary/40 to-transparent">
+        <div className="absolute top-1/1  bottom-10 left-0 right-0 p-6">
           <div className="flex items-end justify-between">
             <div className="text-white max-w-[75%]">
               <h2 className="text-2xl font-bold leading-tight">{product.name}</h2>

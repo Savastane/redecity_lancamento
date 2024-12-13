@@ -142,16 +142,16 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
   }, [globalMuted]);
 
-  // Garantir que o vídeo na viewport comece com áudio se o mute global estiver desligado
+  // Garantir que o vídeo na viewport comece com áudio ao iniciar a aplicação
   useEffect(() => {
     const video = videoRef.current;
-    if (video && isInView && !globalMuted) {
+    if (video && isInView) {
       video.muted = false;
       video.play().catch(() => {
         video.muted = true;
       });
     }
-  }, [isInView, globalMuted]);
+  }, [isInView]);
 
   // Toggle do mute (afeta todos os vídeos)
   const handleToggleMute = () => {

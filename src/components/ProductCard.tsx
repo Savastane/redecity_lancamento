@@ -39,6 +39,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     comment: '',
   });
   const [showPopup, setShowPopup] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   // Função para formatar o número de WhatsApp
   const formatWhatsApp = (value: string) => {
@@ -181,6 +182,28 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }
   };
 
+  // Função para simular "arrasta para cima" e mudar para a próxima promoção
+  const goToNextPromotion = () => {
+    // Aqui você pode implementar a lógica para mudar para a próxima promoção
+    console.log('Simulando arrasta para cima para a próxima promoção');
+    // Exemplo: alterar o estado ou chamar uma função que altera a promoção
+  };
+
+  const handleVideoEnd = () => {
+    console.log('Vídeo terminou, iniciando transição para a próxima promoção');
+    goToNextPromotion();
+  };
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.addEventListener('ended', handleVideoEnd);
+      return () => {
+        videoElement.removeEventListener('ended', handleVideoEnd);
+      };
+    }
+  }, []);
+
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -206,6 +229,24 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }, 3000);
   };
 
+  // Atualiza o progresso do vídeo
+  const updateProgress = () => {
+    if (videoRef.current) {
+      const currentProgress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setProgress(currentProgress);
+    }
+  };
+
+  useEffect(() => {
+    const videoElement = videoRef.current;
+    if (videoElement) {
+      videoElement.addEventListener('timeupdate', updateProgress);
+      return () => {
+        videoElement.removeEventListener('timeupdate', updateProgress);
+      };
+    }
+  }, []);
+
   return (
     <div className="absolute inset-0 h-full w-full">
       {showPopup && (
@@ -225,18 +266,24 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         </div>
       )}
       <LazyLoad height={800} offset={500}>
-        <video
-          ref={videoRef}
-          src={product.videoUrl}
-          className="absolute inset-0 h-full w-full object-cover"
-          loop
-          playsInline
-          muted={isMuted}
-          poster={product.thumbnailUrl}
-          autoPlay
-          preload="auto"
-          onCanPlay={handleCanPlay}
-        />
+        <div>
+          <video
+            ref={videoRef}
+            src={product.videoUrl}
+            className="absolute inset-0 h-full w-full object-cover"
+            loop
+            playsInline
+            muted={isMuted}
+            poster={product.thumbnailUrl}
+            autoPlay
+            preload="auto"
+            onCanPlay={handleCanPlay}
+            onEnded={handleVideoEnd}
+          />
+          {isPlaying ? null : (
+            <div className="progress-bar" style={{ width: `${progress}%`, height: '4px', backgroundColor: 'green', marginTop: '4px' }} />
+          )}
+        </div>
       </LazyLoad>
       {/* absolute */}
       <div className=" inset-0 bg-gradient-to-t from-secondary/95 via-secondary/50 to-transparent">
@@ -334,27 +381,28 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                     placeholder="seu@email.com"
                   />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">WhatsApp *</label>
-                  <input
-                    type="tel"
-                    required
-                    value={leadForm.whatsapp}
-                    onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
-                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="(DDD) Número de WhatsApp"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-1">CEP</label>
-                  <input
-                    type="text"
-                    value={leadForm.cep}
-                    onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
-                    className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
-                    placeholder="CEP"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">Para oferecer informações específicas da sua região.</p>
+                <div className="flex space-x-4">
+                  <div className="flex-grow">
+                    <label className="block text-sm font-medium text-gray-300 mb-1">WhatsApp *</label>
+                    <input
+                      type="tel"
+                      required
+                      value={leadForm.whatsapp}
+                      onChange={(e) => setLeadForm({ ...leadForm, whatsapp: formatWhatsApp(e.target.value) })}
+                      className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="(DDD) Número de WhatsApp"
+                    />
+                  </div>
+                  <div className="flex-none" style={{ width: '11ch' }}>
+                    <label className="block text-sm font-medium text-gray-300 mb-1">CEP</label>
+                    <input
+                      type="text"
+                      value={leadForm.cep}
+                      onChange={(e) => setLeadForm({ ...leadForm, cep: formatCEP(e.target.value) })}
+                      className="input-field w-full px-4 py-2 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary"
+                      placeholder="CEP"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-1">Comentário</label>

@@ -112,7 +112,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           if (entry.isIntersecting) {
             // Vídeo entrou na view
             video.currentTime = 0; // Recomeça do início
-            video.muted = globalMuted; // Mantém o estado de mute global
+            video.muted = !globalMuted; // Mantém o estado de mute global
             
             video.play()
               .then(() => {
@@ -142,15 +142,20 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
   }, [globalMuted]);
 
+  // Garantir que o vídeo na viewport comece com áudio se o mute global estiver desligado
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video && isInView && !globalMuted) {
+      video.muted = false;
+      video.play().catch(() => {
+        video.muted = true;
+      });
+    }
+  }, [isInView, globalMuted]);
+
   // Toggle do mute (afeta todos os vídeos)
   const handleToggleMute = () => {
     const newMutedState = !globalMuted;
-    // Atualizamos o estado local imediatamente
-    setIsMuted(newMutedState);
-    if (videoRef.current) {
-      videoRef.current.muted = newMutedState;
-    }
-    // Depois atualizamos o estado global
     setGlobalMuted(newMutedState);
   };
 
@@ -229,7 +234,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   onClick={() => setShowLeadForm(true)}
                   className="bg-yellow-400 hover:bg-yellow-500 text-secondary px-6 py-3 rounded-lg transition-transform duration-300 ease-in-out text-sm font-medium hover:shadow-lg hover:scale-105"
                 >
-                  Seja o primeiro a saber das novidades!
+                  <span className="inline-block px-2 py-1 bg-white rounded-full text-xs font-bold"> Clique aqui e  Cadastre-se </span>
+                  <span className="ml-2">e seja o primeiro a saber das novidades!</span>
                 </button>
               </div>
             </div>
@@ -247,7 +253,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 onClick={handleToggleMute}
                 className="rounded-full bg-white/20 p-2 backdrop-blur-md transition-colors hover:bg-white/30"
               >
-                {isMuted ? (
+                {globalMuted ? (
                   <VolumeX className="text-white" />
                 ) : (
                   <Volume2 className="text-white" />

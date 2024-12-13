@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
 import type { Product } from '../types';
 import { submitLead } from '../api/leadsApi';
 import { userIP } from '../App';
+import LazyLoad from 'react-lazy-load';
 
 interface ProductCardProps {
   product: Product;
@@ -20,7 +21,7 @@ interface LeadForm {
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  const [isMuted, setIsMuted] = useState(true);
+  const [isMuted, setIsMuted] = useState(true); // Start muted to comply with autoplay policies
   const [isFavorite, setIsFavorite] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadForm, setLeadForm] = useState<LeadForm>({
@@ -31,6 +32,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     comment: '',
   });
   const [showPopup, setShowPopup] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Função para formatar o número de WhatsApp
   const formatWhatsApp = (value: string) => {
@@ -58,6 +60,18 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         element.classList.remove('animate-blink');
       }, 5000);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      setIsMuted(false);
+      document.removeEventListener('click', handleFirstInteraction);
+    };
+
+    document.addEventListener('click', handleFirstInteraction);
+    return () => {
+      document.removeEventListener('click', handleFirstInteraction);
+    };
   }, []);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
@@ -103,15 +117,18 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           </div>
         </div>
       )}
-      <video
-        src={product.videoUrl}
-        className="absolute inset-0 h-full w-full object-cover"
-        loop
-        autoPlay
-        muted={isMuted}
-        playsInline
-        poster={product.thumbnailUrl}
-      />
+      <LazyLoad height={800} offset={300}>
+        <video
+          ref={videoRef}
+          src={product.videoUrl}
+          className="absolute inset-0 h-full w-full object-cover"
+          loop
+          autoPlay
+          muted={isMuted}
+          playsInline
+          poster={product.thumbnailUrl}
+        />
+      </LazyLoad>
       {/* absolute */}
       <div className=" inset-0 bg-gradient-to-t from-secondary/95 via-secondary/50 to-transparent">
         <div className="absolute top-1/2  bottom-10 left-0 right-0 p-6">

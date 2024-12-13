@@ -111,24 +111,21 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
           if (entry.isIntersecting) {
             // Vídeo entrou na view
-            video.muted = globalMuted; // Começa mutado para garantir reprodução
-            setIsMuted(globalMuted); // Sincroniza estado local
+            video.currentTime = 0; // Recomeça do início
+            video.muted = globalMuted; // Mantém o estado de mute global
             
             video.play()
               .then(() => {
                 setIsPlaying(true);
                 // Atualiza para o estado global após começar a reproduzir
-                setIsMuted(globalMuted || !entry.isIntersecting);
-                video.muted = globalMuted || !entry.isIntersecting;
+                video.muted = globalMuted;
               })
               .catch(() => {
-                setIsMuted(true);
                 video.muted = true;
               });
           } else {
             video.pause();
             setIsPlaying(false);
-            setIsMuted(true);
             video.muted = true;
           }
         });

@@ -85,12 +85,18 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   const handleCanPlay = () => {
     setIsVideoReady(true);
     if (videoRef.current) {
+      
       videoRef.current.play()
         .then(() => {
           setIsPlaying(true);
-          // Vídeo começou a reproduzir, atualizamos o mute
+          // Vídeo começou a reproduzir, atualizamos o mute          
           setIsMuted(globalMuted || !isInView);
+          setIsMuted(globalMuted || !isInView);
+          setIsMuted(globalMuted || !isInView);
+          
+          
           videoRef.current!.muted = globalMuted || !isInView;
+          
         })
         .catch((error) => {
           console.log('Playback prevented', error);
@@ -142,21 +148,37 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
   }, [globalMuted]);
 
-  // Garantir que o vídeo na viewport comece com áudio ao iniciar a aplicação
+  // Garantir que o vídeo na viewport comece com áudio obedecendo ao estado do mute global
   useEffect(() => {
     const video = videoRef.current;
     if (video && isInView) {
-      video.muted = false;
+      video.muted = globalMuted;
       video.play().catch(() => {
         video.muted = true;
       });
     }
-  }, [isInView]);
+  }, [isInView, globalMuted]);
 
   // Toggle do mute (afeta todos os vídeos)
   const handleToggleMute = () => {
     const newMutedState = !globalMuted;
     setGlobalMuted(newMutedState);
+  };
+
+  // Função para pausar o vídeo
+  const handlePauseVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  // Função para reproduzir o vídeo
+  const handlePlayVideo = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
   };
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
@@ -259,6 +281,25 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                   <Volume2 className="text-white" />
                 )}
               </button>
+              {isPlaying ? (
+                <button
+                  onClick={handlePauseVideo}
+                  className="rounded-full bg-white/20 p-2 backdrop-blur-md transition-colors hover:bg-white/30"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+              ) : (
+                <button
+                  onClick={handlePlayVideo}
+                  className="rounded-full bg-white/20 p-2 backdrop-blur-md transition-colors hover:bg-white/30"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 3l14 9-14 9V3z" />
+                  </svg>
+                </button>
+              )}
             </div>
           </div>
         </div>

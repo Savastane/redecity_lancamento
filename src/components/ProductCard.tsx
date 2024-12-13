@@ -21,7 +21,10 @@ interface LeadForm {
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  const [isMuted, setIsMuted] = useState(true); // Start muted to comply with autoplay policies
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadForm, setLeadForm] = useState<LeadForm>({
@@ -32,7 +35,6 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     comment: '',
   });
   const [showPopup, setShowPopup] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Função para formatar o número de WhatsApp
   const formatWhatsApp = (value: string) => {
@@ -62,9 +64,10 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }
   }, []);
 
+  // Detectar primeira interação do usuário
   useEffect(() => {
     const handleFirstInteraction = () => {
-      setIsMuted(false);
+      setHasUserInteracted(true);
       document.removeEventListener('click', handleFirstInteraction);
     };
 
@@ -73,6 +76,39 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       document.removeEventListener('click', handleFirstInteraction);
     };
   }, []);
+
+  // Configurar o observer para detectar quando o vídeo está visível
+  useEffect(() => {
+    if (!videoRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          setIsInView(entry.isIntersecting);
+          if (hasUserInteracted) {
+            if (entry.isIntersecting) {
+              // Vídeo entrou na view, desmuta
+              videoRef.current!.muted = false;
+              setIsMuted(false);
+            } else {
+              // Vídeo saiu da view, muta
+              videoRef.current!.muted = true;
+              setIsMuted(true);
+            }
+          }
+        });
+      },
+      {
+        threshold: 0.5 // Ativa quando 50% do vídeo está visível
+      }
+    );
+
+    observer.observe(videoRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasUserInteracted, product.id]);
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -162,7 +198,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 />
               </button>
               <button
-                onClick={() => setIsMuted(!isMuted)}
+                onClick={() => {
+                  setIsMuted(!isMuted);
+                  if (videoRef.current) {
+                    videoRef.current.muted = !isMuted;
+                  }
+                }}
                 className="rounded-full bg-white/20 p-2 backdrop-blur-md transition-colors hover:bg-white/30"
               >
                 {isMuted ? (

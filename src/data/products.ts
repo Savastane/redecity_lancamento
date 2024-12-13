@@ -1,7 +1,7 @@
 export const PRODUCTS = [
   {
     id: '1',
-    name: 'RedeCITY Boas vindas',
+    name: 'RedeCITY',
     price: 99.99,
     Fullybooked: false,
     description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',
@@ -11,7 +11,7 @@ export const PRODUCTS = [
   },
   {
     id: '10',
-    name: 'RedeCITY Mais instrucoes ',
+    name: 'Boas Vindas',
     price: 99.99,
     Fullybooked: false,
     description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',

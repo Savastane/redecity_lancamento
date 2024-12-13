@@ -4,6 +4,7 @@ import type { Product } from '../types';
 import { submitLead } from '../api/leadsApi';
 import { userIP } from '../App';
 import LazyLoad from 'react-lazy-load';
+import { useAudio } from '../contexts/AudioContext';
 
 interface ProductCardProps {
   product: Product;
@@ -21,10 +22,13 @@ interface LeadForm {
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
-  const [isMuted, setIsMuted] = useState(true);
+  const { globalMuted, setGlobalMuted } = useAudio();
+  const [isMuted, setIsMuted] = useState(true); // Começa mutado para garantir autoplay
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [isInView, setIsInView] = useState(false);
+  const [isVideoReady, setIsVideoReady] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [hasUserInteracted, setHasUserInteracted] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [showLeadForm, setShowLeadForm] = useState(false);
   const [leadForm, setLeadForm] = useState<LeadForm>({
@@ -77,6 +81,23 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     };
   }, []);
 
+  // Força a reprodução quando o vídeo estiver pronto
+  const handleCanPlay = () => {
+    setIsVideoReady(true);
+    if (videoRef.current) {
+      videoRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+          // Vídeo começou a reproduzir, atualizamos o mute
+          setIsMuted(globalMuted);
+          videoRef.current!.muted = globalMuted;
+        })
+        .catch((error) => {
+          console.log('Playback prevented', error);
+        });
+    }
+  };
+
   // Configurar o observer para detectar quando o vídeo está visível
   useEffect(() => {
     if (!videoRef.current) return;
@@ -85,21 +106,35 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       (entries) => {
         entries.forEach((entry) => {
           setIsInView(entry.isIntersecting);
-          if (hasUserInteracted) {
-            if (entry.isIntersecting) {
-              // Vídeo entrou na view, desmuta
-              videoRef.current!.muted = false;
-              setIsMuted(false);
-            } else {
-              // Vídeo saiu da view, muta
-              videoRef.current!.muted = true;
-              setIsMuted(true);
-            }
+          const video = videoRef.current;
+          if (!video) return;
+
+          if (entry.isIntersecting) {
+            // Vídeo entrou na view
+            video.muted = true; // Começa mutado para garantir reprodução
+            setIsMuted(true); // Sincroniza estado local
+            
+            video.play()
+              .then(() => {
+                setIsPlaying(true);
+                // Atualiza para o estado global após começar a reproduzir
+                setIsMuted(globalMuted);
+                video.muted = globalMuted;
+              })
+              .catch(() => {
+                setIsMuted(true);
+                video.muted = true;
+              });
+          } else {
+            video.pause();
+            setIsPlaying(false);
+            setIsMuted(true);
+            video.muted = true;
           }
         });
       },
       {
-        threshold: 0.5 // Ativa quando 50% do vídeo está visível
+        threshold: 0.1
       }
     );
 
@@ -108,7 +143,19 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     return () => {
       observer.disconnect();
     };
-  }, [hasUserInteracted, product.id]);
+  }, [globalMuted]);
+
+  // Toggle do mute (afeta todos os vídeos)
+  const handleToggleMute = () => {
+    const newMutedState = !globalMuted;
+    // Atualizamos o estado local imediatamente
+    setIsMuted(newMutedState);
+    if (videoRef.current) {
+      videoRef.current.muted = newMutedState;
+    }
+    // Depois atualizamos o estado global
+    setGlobalMuted(newMutedState);
+  };
 
   const handleLeadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,16 +200,18 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           </div>
         </div>
       )}
-      <LazyLoad height={800} offset={300}>
+      <LazyLoad height={800} offset={500}>
         <video
           ref={videoRef}
           src={product.videoUrl}
           className="absolute inset-0 h-full w-full object-cover"
           loop
-          autoPlay
-          muted={isMuted}
           playsInline
+          muted={isMuted}
           poster={product.thumbnailUrl}
+          autoPlay
+          preload="auto"
+          onCanPlay={handleCanPlay}
         />
       </LazyLoad>
       {/* absolute */}
@@ -198,12 +247,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
                 />
               </button>
               <button
-                onClick={() => {
-                  setIsMuted(!isMuted);
-                  if (videoRef.current) {
-                    videoRef.current.muted = !isMuted;
-                  }
-                }}
+                onClick={handleToggleMute}
                 className="rounded-full bg-white/20 p-2 backdrop-blur-md transition-colors hover:bg-white/30"
               >
                 {isMuted ? (

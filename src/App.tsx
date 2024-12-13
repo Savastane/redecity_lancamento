@@ -7,6 +7,7 @@ import { useCart } from './hooks/useCart';
 import { PRODUCTS } from './data/products';
 import MenuStart from './components/MenuStart';
 import { AuthProvider } from './contexts/AuthContext';
+import { AudioProvider } from './contexts/AudioContext';
 import OrdersPage from './pages/OrdersPage';
 import ProfilePage from './pages/ProfilePage';
 import FavoritesPage from './pages/FavoritesPage';
@@ -129,19 +130,21 @@ function App() {
   }, []);
 
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/orders" element={<OrdersPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/favorites" element={<FavoritesPage />} />
-          <Route path="/tokens" element={<TokensPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-        </Routes>
-        <MenuStart />
-      </AuthProvider>
-    </BrowserRouter>
+    <AudioProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/tokens" element={<TokensPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+          </Routes>
+          <MenuStart />
+        </AuthProvider>
+      </BrowserRouter>
+    </AudioProvider>
   );
 }
 

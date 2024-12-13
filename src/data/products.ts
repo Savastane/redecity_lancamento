@@ -1,11 +1,21 @@
 export const PRODUCTS = [
   {
     id: '1',
-    name: 'Studio Fotografico',
+    name: 'RedeCITY Boas vindas',
     price: 99.99,
     Fullybooked: false,
     description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',
     videoUrl: `https://xell.vercel.app/fotografo.mp4`,    
+    thumbnailUrl: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=414&h=736&fit=crop',
+    category: 'Fotografia' 
+  },
+  {
+    id: '10',
+    name: 'RedeCITY Mais instrucoes ',
+    price: 99.99,
+    Fullybooked: false,
+    description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',
+    videoUrl: `https://xell.vercel.app/fotografo2.mp4`,    
     thumbnailUrl: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=414&h=736&fit=crop',
     category: 'Fotografia' 
   },

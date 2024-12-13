@@ -89,8 +89,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         .then(() => {
           setIsPlaying(true);
           // Vídeo começou a reproduzir, atualizamos o mute
-          setIsMuted(globalMuted);
-          videoRef.current!.muted = globalMuted;
+          setIsMuted(globalMuted || !isInView);
+          videoRef.current!.muted = globalMuted || !isInView;
         })
         .catch((error) => {
           console.log('Playback prevented', error);
@@ -111,15 +111,15 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
           if (entry.isIntersecting) {
             // Vídeo entrou na view
-            video.muted = true; // Começa mutado para garantir reprodução
-            setIsMuted(true); // Sincroniza estado local
+            video.muted = globalMuted; // Começa mutado para garantir reprodução
+            setIsMuted(globalMuted); // Sincroniza estado local
             
             video.play()
               .then(() => {
                 setIsPlaying(true);
                 // Atualiza para o estado global após começar a reproduzir
-                setIsMuted(globalMuted);
-                video.muted = globalMuted;
+                setIsMuted(globalMuted || !entry.isIntersecting);
+                video.muted = globalMuted || !entry.isIntersecting;
               })
               .catch(() => {
                 setIsMuted(true);

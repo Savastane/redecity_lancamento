@@ -5,6 +5,7 @@ import { submitLead } from '../api/leadsApi';
 import { userIP } from '../App';
 import LazyLoad from 'react-lazy-load';
 import { useAudio } from '../contexts/AudioContext';
+import { PRODUCTS } from '../data/products';
 
 interface ProductCardProps {
   product: Product;
@@ -246,6 +247,24 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
       };
     }
   }, []);
+
+  useEffect(() => {
+    const preloadNextPromotions = () => {
+      const currentIndex = PRODUCTS.findIndex(p => p.id === product.id);
+      const nextPromotions = PRODUCTS.slice(currentIndex + 1, currentIndex + 4);
+
+      nextPromotions.forEach(promo => {
+        const img = new Image();
+        img.src = promo.thumbnailUrl;
+
+        const video = document.createElement('video');
+        video.src = promo.videoUrl;
+        video.preload = 'auto';
+      });
+    };
+
+    preloadNextPromotions();
+  }, [product]);
 
   return (
     <div className="absolute inset-0 h-full w-full">

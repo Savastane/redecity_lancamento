@@ -249,22 +249,24 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   }, []);
 
   useEffect(() => {
-    const preloadNextPromotions = () => {
-      const currentIndex = PRODUCTS.findIndex(p => p.id === product.id);
-      const nextPromotions = PRODUCTS.slice(currentIndex + 1, currentIndex + 4);
+    if (isInView) {
+      const preloadNextPromotions = () => {
+        const currentIndex = PRODUCTS.findIndex(p => p.id === product.id);
+        const nextPromotions = PRODUCTS.slice(currentIndex + 1, currentIndex + 4);
 
-      nextPromotions.forEach(promo => {
-        const img = new Image();
-        img.src = promo.thumbnailUrl;
+        nextPromotions.forEach(promo => {
+          const img = new Image();
+          img.src = promo.thumbnailUrl;
 
-        const video = document.createElement('video');
-        video.src = promo.videoUrl;
-        video.preload = 'auto';
-      });
-    };
+          const video = document.createElement('video');
+          video.src = promo.videoUrl;
+          video.preload = 'auto';
+        });
+      };
 
-    preloadNextPromotions();
-  }, [product]);
+      preloadNextPromotions();
+    }
+  }, [isInView, product]);
 
   return (
     <div className="absolute inset-0 h-full w-full">

@@ -6,7 +6,7 @@ export const PRODUCTS = [
     Fullybooked: false,
     description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',
     videoUrl: `https://xell.vercel.app/fotografo.mp4`,    
-    thumbnailUrl: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=414&h=736&fit=crop',
+    thumbnailUrl: 'https://xell.vercel.app/load.png',
     category: 'Fotografia' 
   },
   {
@@ -16,7 +16,7 @@ export const PRODUCTS = [
     Fullybooked: false,
     description: 'Kit 20 fotografias com edição. e fotos 10 fotos para o instagram',
     videoUrl: `https://xell.vercel.app/fotografo2.mp4`,    
-    thumbnailUrl: 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=414&h=736&fit=crop',
+    thumbnailUrl: 'https://xell.vercel.app/load.png',
     category: 'Fotografia' 
   },
   {
@@ -27,7 +27,7 @@ export const PRODUCTS = [
     description: 'Tenah seu call center de Marketing digital com um atendimento 24h',
     
     videoUrl: `https://xell.vercel.app/atendente.mp4`,
-    thumbnailUrl: 'https://images.unsplash.com/photo-1590246814883-57c511e76523?w=414&h=736&fit=crop',
+    thumbnailUrl: 'https://i.pinimg.com/736x/8d/01/da/8d01da712cc2883df0ba818821fec863.jpg',
     category: 'Serviço'
   },
   {

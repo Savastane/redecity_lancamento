@@ -7,3 +7,7 @@ export interface Promotion {
   videoUrl: string;
   thumbnailUrl: string;
 }
+
+export interface CartItem extends Promotion {
+  quantity: number;
+}

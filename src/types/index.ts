@@ -2,7 +2,7 @@ export interface Promotion {
   id: string;
   name: string;
   price: number;
-  fullybooked: boolean;
+  fullybooked?: boolean;
   description: string;
   videoUrl: string;
   thumbnailUrl: string;

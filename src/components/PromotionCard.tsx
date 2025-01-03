@@ -5,7 +5,7 @@ import { submitLead } from '../api/leadsApi';
 import { userIP } from '../App';
 import LazyLoad from 'react-lazy-load';
 import { useAudio } from '../contexts/AudioContext';
-import { PROMOTIONS } from '../data/promotions';
+import { getAllPromotions } from '../services/firestore';
 
 interface PromotionCardProps {
   promotion: Promotion;
@@ -255,23 +255,27 @@ export default function PromotionCard({ promotion, onAddToCart }: PromotionCardP
 
   useEffect(() => {
     if (isInView) {
-      const preloadNextPromotions = () => {
-        const currentIndex = PROMOTIONS.findIndex(p => p.id === promotion.id);
-        const nextPromotions = PROMOTIONS.slice(currentIndex + 1, currentIndex + 4);
+      const preloadNextPromotions = async () => {
+        try {
+          const nextPromotions = await getAllPromotions();
+          
+          // Pré-carregar as próximas 3 promoções
+          nextPromotions.slice(0, 3).forEach(promo => {
+            const img = new Image();
+            img.src = promo.thumbnailUrl;
 
-        nextPromotions.forEach(promo => {
-          const img = new Image();
-          img.src = promo.thumbnailUrl;
-
-          const video = document.createElement('video');
-          video.src = promo.videoUrl;
-          video.preload = 'auto';
-        });
+            const video = document.createElement('video');
+            video.src = promo.videoUrl;
+            video.preload = 'auto';
+          });
+        } catch (error) {
+          console.error('Erro ao pré-carregar próximas promoções:', error);
+        }
       };
 
       preloadNextPromotions();
     }
-  }, [isInView, promotion]);
+  }, [isInView]);
 
   
   

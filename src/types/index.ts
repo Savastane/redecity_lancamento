@@ -1,4 +1,4 @@
-export interface Product {
+export interface Promotion {
   id: string;
   name: string;
   price: number;
@@ -9,6 +9,6 @@ export interface Product {
   category: string;
 }
 
-export interface CartItem extends Product {
+export interface CartItem extends Promotion {
   quantity: number;
 }

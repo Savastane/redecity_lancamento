@@ -1,16 +1,16 @@
 import React, { createContext, useContext, useState } from 'react';
-import { Product } from '../types';
+import { Promotion } from '../types';
 
 interface CartItem {
-  product: Product;
+  promotion: Promotion;
   quantity: number;
 }
 
 interface CartContextData {
   items: CartItem[];
-  addToCart: (product: Product) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  addToCart: (promotion: Promotion) => void;
+  removeFromCart: (promotionId: string) => void;
+  updateQuantity: (promotionId: string, quantity: number) => void;
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
@@ -22,29 +22,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
-  const addToCart = (product: Product) => {
+  const addToCart = (promotion: Promotion) => {
     setItems(current => {
-      const existingItem = current.find(item => item.product.id === product.id);
+      const existingItem = current.find(item => item.promotion.id === promotion.id);
       if (existingItem) {
         return current.map(item =>
-          item.product.id === product.id
+          item.promotion.id === promotion.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...current, { product, quantity: 1 }];
+      return [...current, { promotion, quantity: 1 }];
     });
     openCart();
   };
 
-  const removeFromCart = (productId: string) => {
-    setItems(current => current.filter(item => item.product.id !== productId));
+  const removeFromCart = (promotionId: string) => {
+    setItems(current => current.filter(item => item.promotion.id !== promotionId));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (promotionId: string, quantity: number) => {
     setItems(current =>
       current.map(item =>
-        item.product.id === productId
+        item.promotion.id === promotionId
           ? { ...item, quantity }
           : item
       )

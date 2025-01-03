@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
-import { Product } from '../types';
+import { Promotion } from '../types';
 
 interface SchedulingModalProps {
   isOpen: boolean;
   onClose: () => void;
-  items: Product[];
+  items: Promotion[];
   onScheduleConfirm: (date: string, time: string) => void;
 }
 

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, Heart, Volume2, VolumeX, Calendar } from 'lucide-react';
-import type { Product } from '../types';
+import type { Promotion } from '../types';
 import { submitLead } from '../api/leadsApi';
 import { userIP } from '../App';
 import LazyLoad from 'react-lazy-load';
 import { useAudio } from '../contexts/AudioContext';
-import { PRODUCTS } from '../data/products';
+import { PROMOTIONS } from '../data/promotions';
 
-interface ProductCardProps {
-  product: Product;
-  onAddToCart: (product: Product) => void;
+interface PromotionCardProps {
+  promotion: Promotion;
+  onAddToCart: (promotion: Promotion) => void;
 }
 
 interface LeadForm {
@@ -22,7 +22,7 @@ interface LeadForm {
 
 const LAUNCH_DATE = new Date('2025-02-01T00:00:00');
 
-export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export default function PromotionCard({ promotion, onAddToCart }: PromotionCardProps) {
   const { globalMuted, setGlobalMuted } = useAudio();
   const [isMuted, setIsMuted] = useState(true); // Começa mutado para garantir autoplay
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -70,6 +70,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }
   }, []);
 
+
+  
   // Detectar primeira interação do usuário
   useEffect(() => {
     const handleFirstInteraction = () => {
@@ -161,6 +163,9 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     }
   }, [isInView, globalMuted]);
 
+  
+  
+
   // Toggle do mute (afeta todos os vídeos)
   const handleToggleMute = () => {
     const newMutedState = !globalMuted;
@@ -209,7 +214,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
     e.preventDefault();
     
     const lead = {
-      idproduto: product.id,
+      idpromotion: promotion.id,
       nome: leadForm.name,
       email: leadForm.email,
       whatsapp: leadForm.whatsapp,
@@ -251,8 +256,8 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
   useEffect(() => {
     if (isInView) {
       const preloadNextPromotions = () => {
-        const currentIndex = PRODUCTS.findIndex(p => p.id === product.id);
-        const nextPromotions = PRODUCTS.slice(currentIndex + 1, currentIndex + 4);
+        const currentIndex = PROMOTIONS.findIndex(p => p.id === promotion.id);
+        const nextPromotions = PROMOTIONS.slice(currentIndex + 1, currentIndex + 4);
 
         nextPromotions.forEach(promo => {
           const img = new Image();
@@ -266,8 +271,11 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
 
       preloadNextPromotions();
     }
-  }, [isInView, product]);
+  }, [isInView, promotion]);
 
+  
+  
+  
   return (
     <div className="absolute inset-0 h-full w-full">
       {showPopup && (
@@ -290,12 +298,12 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         <div>
           <video
             ref={videoRef}
-            src={product.videoUrl}
+            src={promotion.videoUrl}
             className="absolute inset-0 h-full w-full object-cover"
             loop
             playsInline
             muted={isMuted}
-            poster={product.thumbnailUrl}
+            poster={promotion.thumbnailUrl}
             autoPlay
             preload="auto"
             onCanPlay={handleCanPlay}
@@ -311,7 +319,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         <div className="absolute top-1/2  bottom-10 left-0 right-0 p-6">
           <div className="flex items-end justify-between">
             <div className="text-white max-w-[75%]">
-              <h2 className="text-2xl font-bold leading-tight text-shadow-md">{product.name}</h2>
+              <h2 className="text-2xl font-bold leading-tight text-shadow-md">{promotion.name}</h2>
               <div className="mt-2">
                 <div className="flex items-center gap-2 text-yellow-500 mb-2 launch-date">
                   <Calendar className="h-5 w-5" />

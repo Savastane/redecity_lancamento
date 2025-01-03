@@ -1,10 +1,9 @@
 import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProductCard from './components/ProductCard';
 import Cart from './components/Cart';
 import Header from './components/Header';
 import { useCart } from './hooks/useCart';
-import { PRODUCTS } from './data/products';
+import { PROMOTIONS } from './data/promotions';
 import MenuStart from './components/MenuStart';
 import { AuthProvider } from './contexts/AuthContext';
 import { AudioProvider } from './contexts/AudioContext';
@@ -14,41 +13,41 @@ import FavoritesPage from './pages/FavoritesPage';
 import TokensPage from './pages/TokensPage';
 import NavigationArrows from './components/NavigationArrows';
 import FAQPage from './pages/FAQPage';
+import PromotionCard from './components/PromotionCard';
 
 let userIP = '';
 
 function HomePage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const cart = useCart();
 
   const ITEMS_PER_PAGE = 5;
-  const filteredProducts = useMemo(() => {
-    const query = searchQuery.toLowerCase();
-    return PRODUCTS.filter(product => 
-      product.name.toLowerCase().includes(query) ||
-      product.description.toLowerCase().includes(query) ||
-      product.category.toLowerCase().includes(query)
+  const filteredPromotions = useMemo(() => {
+    if (!searchTerm) return PROMOTIONS;
+    return PROMOTIONS.filter(promotion => 
+      promotion.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      promotion.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [searchQuery]);
+  }, [searchTerm]);
 
-  const paginatedProducts = useMemo(() => {
-    return filteredProducts.slice(0, currentPage * ITEMS_PER_PAGE);
-  }, [filteredProducts, currentPage]);
+  const paginatedPromotions = useMemo(() => {
+    return filteredPromotions.slice(0, currentPage * ITEMS_PER_PAGE);
+  }, [filteredPromotions, currentPage]);
 
-  const lastProductRef = useCallback((node: HTMLDivElement) => {
+  const lastPromotionRef = useCallback((node: HTMLDivElement) => {
     if (observerRef.current) observerRef.current.disconnect();
 
     observerRef.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && paginatedProducts.length < filteredProducts.length) {
+      if (entries[0].isIntersecting && paginatedPromotions.length < filteredPromotions.length) {
         setCurrentPage(prev => prev + 1);
       }
     });
 
     if (node) observerRef.current.observe(node);
-  }, [filteredProducts.length, paginatedProducts.length]);
+  }, [filteredPromotions.length, paginatedPromotions.length]);
 
   const handleScrollUp = () => {
     if (scrollContainerRef.current) {
@@ -77,7 +76,7 @@ function HomePage() {
       <Header
         onOpenCart={cart.toggleCart}
         cartItemsCount={cart.totalItems}
-        // onSearch={setSearchQuery}
+        // onSearch={setSearchTerm}
       />
       
       <div className="mx-auto h-screen w-full max-w-[430px] bg-[#1a2028] pt-16">
@@ -85,15 +84,15 @@ function HomePage() {
           ref={scrollContainerRef}
           className="h-[calc(100vh-4rem)] overflow-y-auto snap-y snap-mandatory"
         >       
-          {paginatedProducts.map((product, index) => (
+          {paginatedPromotions.map((promotion, index) => (
             <div
-              key={product.id}
-              ref={index === paginatedProducts.length - 1 ? lastProductRef : undefined}
+              key={promotion.id}
+              ref={index === paginatedPromotions.length - 1 ? lastPromotionRef : undefined}
               className="relative h-screen w-full snap-start"
             >
               <div className="absolute inset-0">
-                <ProductCard
-                  product={product}
+                <PromotionCard
+                  promotion={promotion}
                   onAddToCart={cart.addToCart}
                 />
               </div>
@@ -124,7 +123,7 @@ function App() {
       .then(response => response.json())
       .then(data => {
         userIP = data.ip;
-        // onsole.log('IP Address:', userIP);
+        // console.log('IP Address:', userIP);
       })
       .catch(error => console.error('Error fetching IP:', error));
   }, []);

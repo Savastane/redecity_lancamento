@@ -1,4 +1,4 @@
-export const PRODUCTS = [
+export const PRODUCTSFF = [
   {
     id: '1',
     name: 'RedeCITY',

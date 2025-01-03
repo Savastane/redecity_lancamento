@@ -261,9 +261,10 @@ export default function PromotionCard({ promotion, onAddToCart }: PromotionCardP
           
           // Pré-carregar as próximas 3 promoções
           nextPromotions.slice(0, 3).forEach(promo => {
-            // const img = new Image();
-            // img.src = "/loading.png";
-            // promo.thumbnailUrl
+            promo.thumbnailUrl = '/loading.png'; 
+            const img = new Image();
+             img.src = promo.thumbnailUrl;
+             
 
             const video = document.createElement('video');
             video.src = promo.videoUrl;
@@ -308,7 +309,8 @@ export default function PromotionCard({ promotion, onAddToCart }: PromotionCardP
             loop
             playsInline
             muted={isMuted}
-            poster={promotion.thumbnailUrl}
+            // poster={promotion.thumbnailUrl}
+            poster='/loading.png' 
             autoPlay
             preload="auto"
             onCanPlay={handleCanPlay}
